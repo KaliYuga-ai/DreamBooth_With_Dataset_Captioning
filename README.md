@@ -24,6 +24,7 @@ You can support victorchall's awesome EveryDream on
 [Follow Shivam](https://twitter.com/ShivamShrirao) on Twitter
 
 [Follow me](https://twitter.com/KaliYuga_ai) (KaliYuga) on Twitter!
+
 -------
 About KaliYuga's Dataset Organization Omnitool
 Methods of Use
