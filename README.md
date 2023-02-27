@@ -25,7 +25,17 @@ You can support victorchall's awesome EveryDream on
 
 [Follow me](https://twitter.com/KaliYuga_ai) (KaliYuga) on Twitter!
 
+--------
+
+##**Changelog**
+**Feb 26, '24** 
+* Updated the prompt input and text file extraction section to skip generation of new text files for images if an accurate text file already exists.
+    * Added a text log of of text file generation/skipping and an accurate progress bar
+* Added a note that class images are needed for now in both modes. If you don't add class images/reg images, it tries to read the train_dreambooth.py file as an image, and hte whole thing breaks
+* Fixed an issue in which an extra /content/drive/MyDrive was prepended to OUTPUT_DIR.
+
 -------
+
 ## ** About KaliYuga's Dataset Organization Omnitool**
 # Methods of Use
 
@@ -54,8 +64,6 @@ Please note that, if you're using class prompts, you do not have to provide clas
 
 If you have the same word in both your instance and class prompt, it can lead to overfitting on that specific word. When this happens, the model may focus too heavily on that word and generate images that only match that word, rather than the overall concept. To avoid this, it's recommended to choose unique and distinct prompts for both the instance and class.
 <br></br>
-
----
 
 **Pros and Cons of These Methods of Dataset Labeling**
 ***Pros--***much more accurate text/image pairs than a general instance prompt (assuming good image captioning)
