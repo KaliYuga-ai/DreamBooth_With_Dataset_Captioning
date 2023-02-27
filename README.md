@@ -29,7 +29,7 @@ You can support victorchall's awesome EveryDream on
 **Feb 26, '24** 
 * Updated the prompt input and text file extraction section to skip generation of new text files for images if an accurate text file already exists.
     * Added a text log of of text file generation/skipping and an accurate progress bar
-* Added a note that class images are needed for now in both modes. If you don't add class images/reg images, it tries to read the train_dreambooth.py file as an image, and hte whole thing breaks
+* Added a note that class images are needed (for now) in both modes. If you don't add class images/reg images, it tries to read the train_dreambooth.py file as an image, and the whole thing breaks
 * Fixed an issue in which an extra /content/drive/MyDrive was prepended to OUTPUT_DIR.
 
 -------
