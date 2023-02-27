@@ -1,5 +1,3 @@
-# DreamBooth With Dataset Captioning
-
 # KaliYuga's DreamBooth With Dataset Captioning
 
 <div>
