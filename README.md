@@ -29,20 +29,20 @@ You can support victorchall's awesome EveryDream on
 ## ** About KaliYuga's Dataset Organization Omnitool**
 # Methods of Use
 
-###**Method 1: Use Image Filenames As Instance Prompts**
-####***What Method 1 Does***
+**Method 1: Use Image Filenames As Instance Prompts**
+***What Method 1 Does***
 When you specify the path to your image dataset, running the cell creates text files of each image caption (filename). These are then used instead of instance prompts. 
 
 **To use this**, simply do not input instance/class prompts or class path below. **You will still need to input an instance_directory path and a class directory**, as this is the path to all your dataset images and regularization images.
 <br></br>
 
-###**Method 2: Use Image Filenames alsongside Instance Prompts and Class Prompts**
+**Method 2: Use Image Filenames alsongside Instance Prompts and Class Prompts**
 
-####***What Method 2 Does***
+***What Method 2 Does***
 Like method one, this method extracts the filenames of all the images in a specified directory and saves them to a text file which can be used as input for machine learning models. Unlike the above section, though, you can use **instance prompts** and **class prompts** alongside basic extracted image captions.
 <br></br>
 
-#####***What Are Instance and Class Prompts?***
+***What Are Instance and Class Prompts?***
 
 Instance and class prompts are additional text descriptions of the image content that can help improve the quality of the model's output.
 
@@ -50,14 +50,14 @@ Instance prompts describe specific objects or features within an image, such as 
 
 Please note that, if you're using class prompts, you do not have to provide class images yourself. The class prompt you provide will be used to generate these automatically from stable diffusion and save them to your drive.
 <br></br>
-#####**IMPORTANT NOTE:**
+**IMPORTANT NOTE:**
 
 If you have the same word in both your instance and class prompt, it can lead to overfitting on that specific word. When this happens, the model may focus too heavily on that word and generate images that only match that word, rather than the overall concept. To avoid this, it's recommended to choose unique and distinct prompts for both the instance and class.
 <br></br>
 
 ---
 
-###**Pros and Cons of These Methods of Dataset Labeling**
-**Pros--**much more accurate text/image pairs than a general instance prompt (assuming good image captioning)
+**Pros and Cons of These Methods of Dataset Labeling**
+***Pros--***much more accurate text/image pairs than a general instance prompt (assuming good image captioning)
 
-**Cons--**hand-captioning datasets is slow going, and tools like BLIP are not always accurate.
+***Cons--***hand-captioning datasets is slow going, and tools like BLIP are not always accurate.
