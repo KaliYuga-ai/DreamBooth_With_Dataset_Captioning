@@ -64,6 +64,7 @@ If you have the same word in both your instance and class prompt, it can lead to
 <br></br>
 
 **Pros and Cons of These Methods of Dataset Labeling**
+
 ***Pros--***much more accurate text/image pairs than a general instance prompt (assuming good image captioning)
 
 ***Cons--***hand-captioning datasets is slow going, and tools like BLIP are not always accurate.
