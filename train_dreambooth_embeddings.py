@@ -277,9 +277,9 @@ def parse_args(input_args=None):
         "--concepts_list",
         type=str,
         default=None,
-        help="Path to json containing multiple concepts, will overwrite parameters like instance_prompt, class_prompt, etc.",
-    )
-    def parse_args(input_args=None):
+        help="Path to json containing multiple concepts, will overwrite parameters like instance_prompt, class_prompt, etc."  
+    )  
+def parse_args(input_args=None):
     parser = argparse.ArgumentParser(description="Simple example of a training script.")
     parser.add_argument(
         "--pretrained_model_name_or_path",
