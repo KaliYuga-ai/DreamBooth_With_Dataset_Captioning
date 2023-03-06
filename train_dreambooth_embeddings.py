@@ -31,34 +31,7 @@ from transformers import CLIPTextModel, CLIPTokenizer
 
 torch.backends.cudnn.benchmark = True
 
-
 logger = get_logger(__name__)
-
-
-def train_step(model, optimizer, instance_path, class_path, clip_model, image_size, device, embeddings):
-    # Load the image and its corresponding embedding
-    tensor, embedding_tensor = preprocess_image_and_embedding(instance_path, image_size, embeddings[0])
-    tensor = tensor.to(device)
-    embedding_tensor = embedding_tensor.to(device)
-
-    # Encode the text prompt using CLIP
-    prompt_tensor = clip_model.encode_text([class_path]).float().to(device)
-
-    # Generate the images
-    with torch.no_grad():
-        images = model.generate_images(prompt_tensor=prompt_tensor, z=model.sample_prior(), x_0=tensor, e_0=embedding_tensor)
-
-    # Calculate the loss
-    loss = model.calculate_loss(images)
-
-    # Backpropagate and update model
-    optimizer.zero_grad()
-    loss.backward()
-    optimizer.step()
-
-    return loss.item()
-    
-    
 def parse_args(input_args=None):
     parser = argparse.ArgumentParser(description="Simple example of a training script.")
     parser.add_argument(
@@ -67,6 +40,12 @@ def parse_args(input_args=None):
         default=None,
         required=True,
         help="Path to pretrained model or model identifier from huggingface.co/models.",
+    )
+    parser.add_argument(
+        "--json_file",
+        type=str,
+        default=None,
+        help="Path to json containing multiple concepts, will overwrite parameters like instance_prompt, class_prompt, etc.",
     )
     parser.add_argument(
         "--pretrained_vae_name_or_path",
@@ -308,10 +287,6 @@ def parse_args(input_args=None):
     env_local_rank = int(os.environ.get("LOCAL_RANK", -1))
     if env_local_rank != -1 and env_local_rank != args.local_rank:
         args.local_rank = env_local_rank
-
-    # Load the embeddings
-    embeddings_file = os.path.join(args.embeddings_dir, "embeddings.npy")
-    embeddings = np.load(embeddings_file)
 
     return args
 
@@ -945,3 +920,21 @@ def main(args):
 if __name__ == "__main__":
     args = parse_args()
     main(args)
+
+    def train_step(model, optimizer, instance_path, class_path, clip_model, image_size, device, embeddings):
+        # Load the image and its corresponding embedding
+        tensor, embedding_tensor = preprocess_image_and_embedding(instance_path, image_size, embeddings[0])
+        tensor = tensor.to(device)
+        embedding_tensor = embedding_tensor.to(device)
+        # Encode the text prompt using CLIP
+        prompt_tensor = clip_model.encode_text([class_path]).float().to(device)
+        # Generate the images
+        with torch.no_grad():
+            images = model.generate_images(prompt_tensor=prompt_tensor, z=model.sample_prior(), x_0=tensor, e_0=embedding_tensor)
+        # Calculate the loss
+        loss = model.calculate_loss(images)
+        # Backpropagate and update model
+        optimizer.zero_grad()
+        loss.backward()
+        optimizer.step()
+        return loss.item()
