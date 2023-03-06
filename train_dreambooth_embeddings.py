@@ -250,7 +250,7 @@ def parse_args(input_args=None):
         "--concepts_list",
         type=str,
         default=None,
-        help="Path to json containing multiple concepts, will overwrite parameters like instance_prompt, class_prompt, etc."  
+        help="Path to json containing multiple concepts, will overwrite parameters like instance_prompt, class_prompt, etc.",  
     )
     parser.add_argument(
         "--read_prompts_from_txts",
