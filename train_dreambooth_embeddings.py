@@ -42,12 +42,6 @@ def parse_args(input_args=None):
         help="Path to pretrained model or model identifier from huggingface.co/models.",
     )
     parser.add_argument(
-        "--json_file",
-        type=str,
-        default=None,
-        help="Path to json containing multiple concepts, will overwrite parameters like instance_prompt, class_prompt, etc.",
-    )
-    parser.add_argument(
         "--pretrained_vae_name_or_path",
         type=str,
         default=None,
@@ -257,15 +251,6 @@ def parse_args(input_args=None):
         type=str,
         default=None,
         help="Path to json containing multiple concepts, will overwrite parameters like instance_prompt, class_prompt, etc."  
-    )  
-def parse_args(input_args=None):
-    parser = argparse.ArgumentParser(description="Simple example of a training script.")
-    parser.add_argument(
-        "--pretrained_model_name_or_path",
-        type=str,
-        default=None,
-        required=True,
-        help="Path to pretrained model or model identifier from huggingface.co/models.",
     )
     parser.add_argument(
         "--read_prompts_from_txts",
