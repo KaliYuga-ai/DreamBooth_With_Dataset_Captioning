@@ -32,14 +32,15 @@ from transformers import CLIPTextModel, CLIPTokenizer
 torch.backends.cudnn.benchmark = True
 
 logger = get_logger(__name__)
+
 def parse_args(input_args=None):
     parser = argparse.ArgumentParser(description="Simple example of a training script.")
     parser.add_argument(
-        "--pretrained_model_name_or_path",
-        type=str,
-        default=None,
-        required=True,
-        help="Path to pretrained model or model identifier from huggingface.co/models.",
+    "--pretrained_model_name_or_path",
+    type=str,
+    default="runwayml/stable-diffusion-v1-5",
+    required=True,
+    help="Path to pretrained model or model identifier from huggingface.co/models.",
     )
     parser.add_argument(
         "--pretrained_vae_name_or_path",
