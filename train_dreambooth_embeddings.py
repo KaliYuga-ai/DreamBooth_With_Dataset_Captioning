@@ -5,7 +5,6 @@ import random
 import json
 import logging
 import math
-import numpy as np
 import os
 from contextlib import nullcontext
 from pathlib import Path
@@ -31,16 +30,42 @@ from transformers import CLIPTextModel, CLIPTokenizer
 
 torch.backends.cudnn.benchmark = True
 
+
 logger = get_logger(__name__)
+
+def train_step(text_embeddings, image_embeddings, model, optimizer, diffusion, loss_fn, scheduler=None):
+    model.train()
+
+    # Sample noise input for each diffusion step
+    z = diffusion.sample_z(batch_size, device=device)
+
+    # Iterate over the diffusion steps in reverse order
+    for i in range(diffusion.num_steps - 1, -1, -1):
+        # Generate the output image for this diffusion step
+        output_image = model(text_embeddings, image_embeddings, z[i], i)
+
+        # Calculate the loss between the generated image and the ground truth image
+        loss = loss_fn(output_image, target_image, i)
+
+        # Update the model parameters
+        optimizer.zero_grad()
+        loss.backward()
+        optimizer.step()
+
+    # Update the learning rate scheduler
+    if scheduler is not None:
+        scheduler.step()
+
+    return loss.item()
 
 def parse_args(input_args=None):
     parser = argparse.ArgumentParser(description="Simple example of a training script.")
     parser.add_argument(
-    "--pretrained_model_name_or_path",
-    type=str,
-    default="runwayml/stable-diffusion-v1-5",
-    required=True,
-    help="Path to pretrained model or model identifier from huggingface.co/models.",
+        "--pretrained_model_name_or_path",
+        type=str,
+        default=None,
+        required=True,
+        help="Path to pretrained model or model identifier from huggingface.co/models.",
     )
     parser.add_argument(
         "--pretrained_vae_name_or_path",
@@ -251,18 +276,12 @@ def parse_args(input_args=None):
         "--concepts_list",
         type=str,
         default=None,
-        help="Path to json containing multiple concepts, will overwrite parameters like instance_prompt, class_prompt, etc.",  
+        help="Path to json containing multiple concepts, will overwrite parameters like instance_prompt, class_prompt, etc.",
     )
     parser.add_argument(
         "--read_prompts_from_txts",
         action="store_true",
         help="Use prompt per image. Put prompts in the same directory as images, e.g. for image.png create image.png.txt.",
-    )
-    parser.add_argument(
-        "--embeddings_dir",
-        type=str,
-        default=None,
-        help="A folder containing the embeddings numpy file.",
     )
 
     if input_args is not None:
@@ -275,6 +294,7 @@ def parse_args(input_args=None):
         args.local_rank = env_local_rank
 
     return args
+
 
 class DreamBoothDataset(Dataset):
     """
@@ -368,41 +388,6 @@ class DreamBoothDataset(Dataset):
             ).input_ids
 
         return example
-
-
-def preprocess_image_and_embedding(image_path, image_size, embedding):
-    # Preprocess the image
-    image = Image.open(image_path).convert('RGB')
-    transform = transforms.Compose([
-        transforms.Resize(image_size),
-        transforms.CenterCrop(image_size),
-        transforms.ToTensor(),
-        transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
-    ])
-    tensor = transform(image).unsqueeze(0)
-
-    # Convert the embedding to a tensor
-    embedding_tensor = torch.tensor(embedding).unsqueeze(0)
-
-    return tensor, embedding_tensor
-    
-
-def generate_images(z, instance_path, class_path, clip_model, image_size, model, device, embeddings, embedding_idx):
-    with torch.no_grad():
-        # Load the image and its corresponding embedding
-        tensor, embedding_tensor = preprocess_image_and_embedding(instance_path, image_size, embeddings, embedding_idx)
-        tensor = tensor.to(device)
-        embedding_tensor = embedding_tensor.to(device)
-
-        # Encode the text prompt using CLIP
-        # Replace with your own implementation if needed
-        prompt_tensor = torch.zeros((1, 512)).to(device)
-
-        # Pass the image and its corresponding embedding to the VAE model to generate the image
-        images = model.generate_images(z, prompt_tensor, tensor, embedding_tensor)
-
-    return images
-
 
 
 class PromptDataset(Dataset):
@@ -906,21 +891,3 @@ def main(args):
 if __name__ == "__main__":
     args = parse_args()
     main(args)
-
-    def train_step(model, optimizer, instance_path, class_path, clip_model, image_size, device, embeddings):
-        # Load the image and its corresponding embedding
-        tensor, embedding_tensor = preprocess_image_and_embedding(instance_path, image_size, embeddings[0])
-        tensor = tensor.to(device)
-        embedding_tensor = embedding_tensor.to(device)
-        # Encode the text prompt using CLIP
-        prompt_tensor = clip_model.encode_text([class_path]).float().to(device)
-        # Generate the images
-        with torch.no_grad():
-            images = model.generate_images(prompt_tensor=prompt_tensor, z=model.sample_prior(), x_0=tensor, e_0=embedding_tensor)
-        # Calculate the loss
-        loss = model.calculate_loss(images)
-        # Backpropagate and update model
-        optimizer.zero_grad()
-        loss.backward()
-        optimizer.step()
-        return loss.item()
