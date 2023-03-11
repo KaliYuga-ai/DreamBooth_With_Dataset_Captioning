@@ -25,7 +25,7 @@ You can support victorchall's awesome EveryDream on
 **Changelog**
 
 **March 10, '23**
-Added support for .gif and .jpeg autocaption extraction in the "Run" section under the Omnitool.
+* Added support for .gif and .jpeg autocaption extraction in the "Run" section under the Omnitool.
 
 **Feb 26, '23** 
 * Updated the prompt input and text file extraction section to skip generation of new text files for images if an accurate text file already exists.
