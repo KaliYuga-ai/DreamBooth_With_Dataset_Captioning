@@ -1,8 +1,5 @@
 # KaliYuga's DreamBooth With Dataset Captioning
 
-<div>
-<img src="https://images.squarespace-cdn.com/content/v1/6213c340453c3f502425776e/a432c21c-bb12-4f38-b5e2-1c12a3c403f6/Animated-Logo_1.gif" width="150"/>
-</div>
 
 This is KaliYuga's fork of Shivam Shrirao's [DreamBooth implementation](https://github.com/ShivamShrirao/diffusers/tree/main/examples/dreambooth). It adds a number of new features to make dataset labeling and organization faster and more powerful, and training more accurate (hopefully!).
 
@@ -26,7 +23,7 @@ You can support victorchall's awesome EveryDream on
 --------
 
 ##**Changelog**
-**Feb 26, '24** 
+**Feb 26, '23** 
 * Updated the prompt input and text file extraction section to skip generation of new text files for images if an accurate text file already exists.
     * Added a text log of of text file generation/skipping and an accurate progress bar
 * Added a note that class images are needed (for now) in both modes. If you don't add class images/reg images, it tries to read the train_dreambooth.py file as an image, and the whole thing breaks
