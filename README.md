@@ -24,6 +24,9 @@ You can support victorchall's awesome EveryDream on
 
 **Changelog**
 
+**March 13, '23**
+* Changed the 'caption extraction to text file' portion of the notebook to remove from said text file the "_number" suffix that was originally added to all filenames.
+
 **March 10, '23**
 * Added support for .gif and .jpeg autocaption extraction in the "Run" section under the Omnitool.
 
